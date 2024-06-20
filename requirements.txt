@@ -1,0 +1,13 @@
+Flask~=3.0.3
+Flask-WTF==1.2.1
+WTForms==3.1.2
+python-dotenv==1.0.1
+Werkzeug~=3.0.3
+selenium~=4.21.0
+pymongo~=4.7.3
+lingua-language-detector~=2.0.2
+translators~=5.9.2
+spacy~=3.7.5
+https://github.com/explosion/spacy-models/releases/download/ru_core_news_lg-3.7.0/ru_core_news_lg-3.7.0-py3-none-any.whl#egg=ru_core_news_lg
+
+tqdm~=4.66.4

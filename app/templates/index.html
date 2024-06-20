@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Features - Brand</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename="bootstrap/css/bootstrap.min.css") }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename="css/Montserrat.css") }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename="fonts/fontawesome-all.min.css") }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename="css/baguetteBox.min.css") }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename="css/vanilla-zoom.min.css") }}">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top bg-body clean-navbar">
+    <div class="container">
+      <a class="navbar-brand logo" href="#">
+        <i class="far fa-lightbulb text-info"></i>
+      </a>
+      <div class="collapse navbar-collapse" id="navcol-1">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <h5 class="text-uppercase text-info">Количество статей - <strong>70972</strong></h5>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main class="page">
+    <section class="clean-block features">
+      <div class="container">
+        <form>
+          <div class="block-heading">
+            <h2 class="text-info">Система поиска научной информации</h2>
+            <div class="form-check form-switch form-check-inline mb-2">
+              <input class="form-check-input" type="checkbox" id="formCheck-1">
+              <label class="form-check-label" for="formCheck-1">Добавить рекомендуемые слова</label>
+            </div>
+            <div class="form-check form-switch form-check-inline mb-2">
+              <input class="form-check-input" type="checkbox" id="formCheck-2">
+              <label class="form-check-label" for="formCheck-2">Выводить больше результатов</label>
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-lg-8">
+                <form>
+                  <input class="form-control mt-2 mb-3" type="text" placeholder="Введите запрос">
+                </form>
+              </div>
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-lg-8">
+                <div class="btn-group" role="group">
+                  <button class="btn btn-primary" type="button">Поиск</button>
+                  <button class="btn btn-success" type="button">Уточнить</button>
+                  <button class="btn btn-secondary" type="button">Новый запрос</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Результаты поиска</th>
+                      <th>Близость</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Фахретдинова Дилара Ильдаровна, Сабитова Юлия Камилевна Решение начально-граничных задач
+                        для волнового уравнения методом интегральных преобразований Фурье // Инновации в науке.
+                        2015. №5 (42). URL: https://cyberleninka.ru/article/n/reshenie-nachalno-granichnyh-
+                        zadach-dlya-volnovogo-uravneniya-metodom-integralnyh-preobrazovaniy-furie (дата обращения:).</td>
+                      <td>29,45%</td>
+                    </tr>
+                    <tr>
+                      <td>Забуская А.С. СУММЫ ФЭЙЕРА КАК ЛИНЕЙНЫЙ МЕТОД СУММИРОВАНИЯ РЯДОВ ФУРЬЕ // Вестник
+                        магистратуры. 2015. №2-1 (41). URL: https://cyberleninka.ru/article/n/summy-feyera-kak-
+                        lineynyy-metod-summirovaniya-ryadov-furie (дата обращения:).</td>
+                      <td>22,91%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename="bootstrap/js/bootstrap.min.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/baguetteBox.min.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/vanilla-zoom.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/theme.js") }}"></script>
+</body>
+
+</html>
