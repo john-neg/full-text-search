@@ -1,11 +1,11 @@
+import os
 import random
 import time
 from datetime import datetime
 
-from pymongo.errors import ConnectionFailure
 from selenium.common import NoSuchElementException, TimeoutException
 
-from config import CrawlerConfig, DocumentStatusType, MongoDBSettings
+from config import BaseConfig, CrawlerConfig, DocumentStatusType, MongoDBSettings
 from func import check_captcha, check_empty, check_nginx_error, get_browser
 from pages.article_page import ArticlePage
 from pages.category_page import CategoryPage
@@ -58,7 +58,11 @@ def parse_links(collection: str, database: MongoDbCrudService):
         articles = category_page.get_articles()
         # Проверяем наличие капчи на странице
         if check_captcha(category_page.browser):
-            with open(CrawlerConfig.LOG_FILE, "a", encoding="UTF8") as log:
+            with open(
+                os.path.join(BaseConfig.LOGS_DIR, CrawlerConfig.LOG_FILE),
+                "a",
+                encoding="UTF8",
+            ) as log:
                 log.write(
                     f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} "
                     f"!#{collection} page:{page} CAPTCHA\n"
@@ -72,29 +76,12 @@ def parse_links(collection: str, database: MongoDbCrudService):
             for article_slug in articles:
                 # Проверяем наличие уникального идентификатора статьи в базе данных
                 record = database.get({"article_slug": article_slug})
-
-                # article_data = {"article_slug": article_slug}
-
-                # Если записи нет устанавливаем True для переменной нужно записать в базу
-                need_to_write = False if record else True
-                # Пока переменная need_to_write = True делается попытка записать
-                # идентификатор в базу данных
-                while need_to_write:
-                    try:
-                        article_data = ArticleDocument(article_slug=article_slug)
-                        database.create(article_data.to_dict())
-                        need_to_write = False
-                    # Обрабатываем исключение «ошибка соединения» делаем запись в лог
-                    except ConnectionFailure as error:
-                        print(error)
-                        need_to_write = True
-                        with open(CrawlerConfig.LOG_FILE, "a", encoding="UTF8") as err:
-                            err.write(
-                                f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} "
-                                f"{error} ({collection}, {category_page}, {article_slug})\n"
-                            )
+                # Если нет записи добавляем в базу данных
+                if not record:
+                    article_data = ArticleDocument(article_slug=article_slug)
+                    database.create(article_data.to_dict())
                 time.sleep(0.1)
-        time.sleep(random.choice([1]))
+        time.sleep(random.choice([1, 1.5, 2]))
     browser.quit()
 
 
@@ -134,7 +121,11 @@ def parse_articles(collection: str, database: MongoDbCrudService):
                     {"_id": db_record.get("_id")},
                     {"$set": {"parse_status": DocumentStatusType.WAITING}},
                 )
-                with open(CrawlerConfig.LOG_FILE, "a", encoding="UTF8") as log:
+                with open(
+                    os.path.join(BaseConfig.LOGS_DIR, CrawlerConfig.LOG_FILE),
+                    "a",
+                    encoding="UTF8",
+                ) as log:
                     log.write(
                         f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} "
                         f"!#{collection} article:{article_slug} CAPTCHA\n"

@@ -1,2 +1,6 @@
-pip install --upgrade pip
-pip install -r requirements.txt
+
+### run install.py to prepare environment
+
+```sh
+python install.py
+```

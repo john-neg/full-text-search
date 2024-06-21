@@ -1,11 +1,8 @@
-import time
 from dataclasses import dataclass, field
-from datetime import datetime
 from typing import Iterable
 
 from bson import ObjectId
 from pymongo.cursor import Cursor
-from pymongo.errors import ConnectionFailure
 from tqdm import tqdm
 
 from common.db_service import get_mongo_db_document_service
@@ -15,7 +12,6 @@ from common.processors import TitleProcessor
 from config import DocumentStatusType
 
 nlp = get_nlp_model()
-nlp.disable_pipes(["parser", "ner"])
 database = get_mongo_db_document_service()
 
 # Процессор названий статей
@@ -46,8 +42,8 @@ class ArticlesIterator:
 
 def lemmatize_articles(
     text_data: Iterable[tuple[str, dict[str, ObjectId | str, str]]],
-    batch_size: int = 100,
-    n_process: int = 4,
+    batch_size: int = 50,
+    n_process: int = 2,
 ):
     for value, context in nlp.pipe(
         text_data,
@@ -61,24 +57,15 @@ def lemmatize_articles(
         _id = context.get("_id")
         attr = context.get("attr")
 
-        need_to_write = True
-        while need_to_write:
-            try:
-                database.update(
-                    {"_id": _id},
-                    {
-                        "$set": {
-                            f"lemmas.{attr}": lemmas,
-                            "lemmatization_status": DocumentStatusType.COMPLETED,
-                        }
-                    },
-                )
-                need_to_write = False
-            # Обрабатываем исключение «ошибка соединения»
-            except ConnectionFailure as error:
-                print(error)
-                need_to_write = True
-                time.sleep(1)
+        database.update(
+            {"_id": _id},
+            {
+                "$set": {
+                    f"lemmas.{attr}": lemmas,
+                    "lemmatization_status": DocumentStatusType.COMPLETED,
+                }
+            },
+        )
 
 
 if __name__ == "__main__":
@@ -91,4 +78,4 @@ if __name__ == "__main__":
         }
     )
     db_iterable = ArticlesIterator(db_list)
-    lemmatize_articles(tqdm(db_iterable))
+    lemmatize_articles(tqdm(db_iterable), batch_size=10, n_process=1)

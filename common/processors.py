@@ -1,7 +1,9 @@
 import json
+import os
 import re
 import time
 from dataclasses import dataclass, field
+from typing import LiteralString
 
 import translators as ts
 from lingua import LanguageDetector
@@ -64,8 +66,9 @@ class LanguageProcessor:
         return text
 
     def load_translations(self, filename: str):
-        with open(filename, "r", encoding="utf8") as trans_file:
-            self.translations = json.loads(trans_file.read())
+        if os.path.exists(filename):
+            with open(filename, "r", encoding="utf8") as trans_file:
+                self.translations = json.loads(trans_file.read())
 
     def save_translations(self, filename: str):
         with open(filename, "w", encoding="utf8") as trans_file:

@@ -9,7 +9,9 @@ load_dotenv(os.path.join(BASEDIR, ".env"))
 
 class BaseConfig(object):
     DATA_DIR = os.path.join(BASEDIR, "data")
-    MODEL_DIR = os.path.join(BASEDIR, "models")
+    MODELS_DIR = os.path.join(BASEDIR, "models")
+    LOGS_DIR = os.path.join(BASEDIR, "logs")
+    TRANSLATIONS_CACHE_FILE = os.path.join(DATA_DIR, "keyword_translations.json")
 
 
 class FlaskConfig(object):
@@ -23,7 +25,7 @@ class CrawlerConfig(object):
     """Crawler config data."""
 
     # Базовая ссылка на сайт
-    LINK = 'https://cyberleninka.ru'
+    LINK = "https://cyberleninka.ru"
     # Ссылка на страницу категории
     CATEGORY_LINK = f"{LINK}/article/c/"
     # Селектор для адреса категории
@@ -33,7 +35,7 @@ class CrawlerConfig(object):
     # Селектор для адреса статьи
     ARTICLE_LINK_XPATH = "//*[contains(@href, '/article/n/')]"
     # Название лог файла
-    LOG_FILE = 'crawler.log'
+    LOG_FILE = "crawler.log"
     # Количество статей на странице
     ARTICLES_PER_PAGE = 20
     # Смещение для номера начальной страницы
@@ -44,25 +46,25 @@ class MongoDBSettings(object):
     """Database settings"""
 
     # Имя пользователя БД
-    MONGO_DB_USER = os.getenv('MONGO_DB_USER')
+    MONGO_DB_USER = os.getenv("MONGO_DB_USER")
     # Пароль
-    MONGO_DB_PASS = os.getenv('MONGO_DB_PASS')
+    MONGO_DB_PASS = os.getenv("MONGO_DB_PASS")
     # Адрес сервера БД
-    MONGO_DB_URL = os.getenv('MONGO_DB_URL')
+    MONGO_DB_URL = os.getenv("MONGO_DB_URL")
     # Строка подключения к БД
     CONNECTION_STRING = f"mongodb://{MONGO_DB_USER}:{MONGO_DB_PASS}@{MONGO_DB_URL}"
     # Имя базы данных
-    DB_NAME = 'cyberleninka'
+    DB_NAME = "cyberleninka"
     # Имя коллекции
-    COLLECTION_NAME = 'mathematics'
+    COLLECTION_NAME = "mathematics"
     # COLLECTION_NAME = 'test'
 
 
 class DocumentStatusType(str, Enum):
     """Класс статусов состояния документа."""
 
-    WAITING = 'waiting'
-    IN_PROGRESS = 'in progress'
-    COMPLETED = 'completed'
+    WAITING = "waiting"
+    IN_PROGRESS = "in progress"
+    COMPLETED = "completed"
     DELETE = "delete"
     ERROR = "error"

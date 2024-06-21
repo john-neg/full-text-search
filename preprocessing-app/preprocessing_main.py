@@ -14,10 +14,8 @@ from common.processors import (
 
 # Языковой процессор
 language_processor = LanguageProcessor(target_language="russian")
-# Ранее сделанные переводы
-language_processor.load_translations(
-    os.path.join(BaseConfig.DATA_DIR, "keyword_translations.json")
-)
+# Кэш ранее сделанных переводов
+language_processor.load_translations(BaseConfig.TRANSLATIONS_CACHE_FILE)
 # Процессор ключевых слов
 keywords_processor = KeywordsProcessor(lang_processor=language_processor)
 # Процессор аннотаций
@@ -65,6 +63,4 @@ if __name__ == "__main__":
     db = get_mongo_db_document_service()
     process_articles(db)
     # Сохраняем словарь переводов
-    language_processor.save_translations(
-        os.path.join(BaseConfig.DATA_DIR, "keyword_translations.json")
-    )
+    language_processor.save_translations(BaseConfig.TRANSLATIONS_CACHE_FILE)
