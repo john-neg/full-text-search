@@ -17,16 +17,12 @@ class BasePage:
 
     def scroll_down(self):
         """Пролистывает страницу до конца."""
-        self.browser.execute_script(
-            "window.scrollTo(0, document.body.scrollHeight);"
-        )
+        self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     def check_captcha(self):
         """Проверяет наличие капчи на странице."""
         try:
-            self.browser.find_element(
-                By.ID, 'g-recaptcha-response'
-            )
+            self.browser.find_element(By.ID, "g-recaptcha-response")
             return True
         except NoSuchElementException:
             return False

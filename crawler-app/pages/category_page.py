@@ -40,14 +40,13 @@ class CategoryPage(BasePage):
     def get_articles_page(self, page: int):
         """Открывает указанную страницу."""
         if page and page != 1:
-            self.open(
-                f"{CrawlerConfig.CATEGORY_LINK}{self.category_slug}/{page}"
-            )
+            self.open(f"{CrawlerConfig.CATEGORY_LINK}{self.category_slug}/{page}")
 
     def get_articles(self) -> dict:
         """Возвращает ссылки на статьи со страницы."""
         links = self.browser.find_elements(
-            By.XPATH, CrawlerConfig.ARTICLE_LINK_XPATH
+            By.XPATH,
+            CrawlerConfig.ARTICLE_LINK_XPATH,
         )
         articles = {
             link.get_attribute("href")

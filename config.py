@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 
 from dotenv import load_dotenv
 
@@ -7,7 +8,7 @@ load_dotenv(os.path.join(BASEDIR, ".env"))
 
 
 class BaseConfig(object):
-    DATASET_DIR = os.path.join(BASEDIR, "dataset")
+    DATA_DIR = os.path.join(BASEDIR, "data")
     MODEL_DIR = os.path.join(BASEDIR, "models")
 
 
@@ -35,11 +36,11 @@ class CrawlerConfig(object):
     LOG_FILE = 'crawler.log'
     # Количество статей на странице
     ARTICLES_PER_PAGE = 20
-    # Смещение для начальной страницы
-    PAGE_OFFSET = -40
+    # Смещение для номера начальной страницы
+    PAGE_OFFSET = 0
 
 
-class DbSettings(object):
+class MongoDBSettings(object):
     """Database settings"""
 
     # Имя пользователя БД
@@ -52,3 +53,16 @@ class DbSettings(object):
     CONNECTION_STRING = f"mongodb://{MONGO_DB_USER}:{MONGO_DB_PASS}@{MONGO_DB_URL}"
     # Имя базы данных
     DB_NAME = 'cyberleninka'
+    # Имя коллекции
+    COLLECTION_NAME = 'mathematics'
+    # COLLECTION_NAME = 'test'
+
+
+class DocumentStatusType(str, Enum):
+    """Класс статусов состояния документа."""
+
+    WAITING = 'waiting'
+    IN_PROGRESS = 'in progress'
+    COMPLETED = 'completed'
+    DELETE = "delete"
+    ERROR = "error"

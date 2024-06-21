@@ -43,15 +43,15 @@ class ArticlePage(BasePage):
 
     def get_magazine_issue(self) -> str:
         """Возвращает выпуск журнала."""
-        return self.browser.find_element(
-            By.NAME, "citation_issue"
-        ).get_attribute("content")
+        return self.browser.find_element(By.NAME, "citation_issue").get_attribute(
+            "content"
+        )
 
     def get_magazine_volume(self) -> str:
         """Возвращает том журнала."""
-        return self.browser.find_element(
-            By.NAME, "citation_volume"
-        ).get_attribute("content")
+        return self.browser.find_element(By.NAME, "citation_volume").get_attribute(
+            "content"
+        )
 
     def get_status(self, status) -> str:
         """Возвращает статус статьи 'scopus', 'vak' и т.д."""
@@ -88,15 +88,11 @@ class ArticlePage(BasePage):
         button = self.browser.find_element(By.ID, "btn-quote")
         button.click()
         WebDriverWait(self.browser, 10).until(
-            expected_conditions.visibility_of_element_located(
-                (By.ID, "quote-text")
-            )
+            expected_conditions.visibility_of_element_located((By.ID, "quote-text"))
         )
         text = self.browser.find_element(By.ID, "quote-text").text
         text = re.sub(
-            r"дата обращения: \d{1,2}\W\d{1,2}\W\d{4}",
-            'дата обращения:',
-            text
+            r"дата обращения: \d{1,2}\W\d{1,2}\W\d{4}", "дата обращения:", text
         )
         button = self.browser.find_element(By.CLASS_NAME, "close")
         button.click()
