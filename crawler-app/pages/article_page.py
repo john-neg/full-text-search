@@ -18,7 +18,7 @@ class ArticlePage(BasePage):
     url: str = CrawlerConfig.ARTICLE_LINK
 
     def __post_init__(self):
-        self.open(self.url + self.article_slug)
+        self.open(f"{self.url}{self.article_slug}")
 
     def get_authors(self) -> list:
         """Возвращает авторов."""

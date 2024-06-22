@@ -11,3 +11,6 @@ spacy~=3.7.5
 https://github.com/explosion/spacy-models/releases/download/ru_core_news_lg-3.7.0/ru_core_news_lg-3.7.0-py3-none-any.whl#egg=ru_core_news_lg
 
 tqdm~=4.66.4
+requests~=2.32.3
+scikit-learn~=1.5.0
+numpy~=1.26.4

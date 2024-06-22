@@ -1,8 +1,5 @@
-import os.path
-
 from tqdm import tqdm
 
-from config import BaseConfig, DocumentStatusType
 from common.db_service import get_mongo_db_document_service
 from common.models import ArticleDocument
 from common.processors import (
@@ -11,6 +8,7 @@ from common.processors import (
     LanguageProcessor,
     TextProcessor,
 )
+from config import BaseConfig, DocumentStatusType
 
 # Языковой процессор
 language_processor = LanguageProcessor(target_language="russian")

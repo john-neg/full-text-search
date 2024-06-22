@@ -5,6 +5,7 @@ from bson import ObjectId
 from pymongo.cursor import Cursor
 from tqdm import tqdm
 
+from common.db_repository import DocumentType
 from common.db_service import get_mongo_db_document_service
 from common.func import get_nlp_model, lemmatization
 from common.models import ArticleDocument
@@ -19,8 +20,10 @@ title_processor = TitleProcessor()
 
 
 @dataclass
-class ArticlesIterator:
-    db_list: Cursor[ArticleDocument]
+class ArticlesItemsIterator:
+    """Класс для итерации по аттрибутам коллекции документов."""
+
+    db_list: Cursor[DocumentType]
     _stack: list = field(default_factory=list)
 
     def __iter__(self):
@@ -77,5 +80,5 @@ if __name__ == "__main__":
             "lemmatization_status": DocumentStatusType.WAITING,
         }
     )
-    db_iterable = ArticlesIterator(db_list)
+    db_iterable = ArticlesItemsIterator(db_list)
     lemmatize_articles(tqdm(db_iterable), batch_size=10, n_process=1)

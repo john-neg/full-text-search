@@ -9,7 +9,6 @@ load_dotenv(os.path.join(BASEDIR, ".env"))
 
 class BaseConfig(object):
     DATA_DIR = os.path.join(BASEDIR, "data")
-    MODELS_DIR = os.path.join(BASEDIR, "models")
     LOGS_DIR = os.path.join(BASEDIR, "logs")
     TRANSLATIONS_CACHE_FILE = os.path.join(DATA_DIR, "keyword_translations.json")
 

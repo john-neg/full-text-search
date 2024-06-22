@@ -17,7 +17,7 @@ class CategoryPage(BasePage):
     url: str = CrawlerConfig.CATEGORY_LINK
 
     def __post_init__(self):
-        self.open(self.url + self.category_slug)
+        self.open(f"{self.url}{self.category_slug}")
 
     def get_pages_number(self) -> int:
         """Возвращает количество страниц в категории."""
