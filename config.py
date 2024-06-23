@@ -8,9 +8,20 @@ load_dotenv(os.path.join(BASEDIR, ".env"))
 
 
 class BaseConfig(object):
+    # Директория с моделями и данными
     DATA_DIR = os.path.join(BASEDIR, "data")
+    # Директория с логами
     LOGS_DIR = os.path.join(BASEDIR, "logs")
+    # Название файла с кешем переводов
     TRANSLATIONS_CACHE_FILE = os.path.join(DATA_DIR, "keyword_translations.json")
+    # Название файла модели TF-IDF
+    TF_IDF_MODEL_FILE = os.path.join(DATA_DIR, "tfidf_model.zip")
+    # Название файла модели TF-IDF
+    WORD2VEC_MODEL_FILE = os.path.join(DATA_DIR, "word2vec.model")
+    # Размер автодополнения поисковых запросов
+    AUTOCOMPLETE_SIZE = 1
+    # Размер словаря модели
+    VOCABULARY_SIZE = 10000
 
 
 class FlaskConfig(object):

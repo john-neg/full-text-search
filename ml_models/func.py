@@ -1,18 +1,24 @@
 from collections import Counter
 from typing import Iterable
 
-import numpy as np
 from pymongo.cursor import Cursor
 from sklearn.feature_extraction.text import TfidfVectorizer
+from tqdm import tqdm
 
 from common.db_repository import DocumentType
 from common.db_service import MongoDbCrudService
 from config import DocumentStatusType
 
 
-def get_lemmas_count(data: Iterable[DocumentType], field_name="lemmas") -> Counter:
+def get_lemmas_count(
+    data: Iterable[DocumentType],
+    field_name="lemmas",
+    show_progress: bool = False,
+) -> Counter:
     """Счетчик количества слов."""
     counter = Counter()
+    if show_progress:
+        data = tqdm(data)
     for document in data:
         for key, val in document[field_name].items():
             words = val.split()
@@ -33,3 +39,9 @@ def get_db_list(db: MongoDbCrudService) -> Cursor[DocumentType]:
     return db_list
 
 
+def get_tfidf_vectorizer(vocabulary: list[str]) -> TfidfVectorizer:
+    return TfidfVectorizer(
+        ngram_range=(1, 1),
+        encoding="utf-8",
+        vocabulary=vocabulary,
+    )

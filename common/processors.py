@@ -2,15 +2,18 @@ import json
 import os
 import re
 import time
+from copy import copy
 from dataclasses import dataclass, field
-from typing import LiteralString
 
 import translators as ts
 from lingua import LanguageDetector
 from requests import HTTPError
+from spacy import Language
 from translators.server import TranslatorError
 
-from common.func import get_language_detector
+from common.func import get_language_detector, lemmatization
+from config import BaseConfig
+from ml_models.models import Word2VecModel
 
 
 @dataclass
@@ -104,12 +107,10 @@ class BaseTextProcessor:
 
     def filter_letters(self, text: str) -> str:
         """Фильтр символов."""
-
         return re.sub(self.RE_FILTER_SYMBOLS, "", text.lower())
 
     def fix_letters(self, text: str) -> str:
         """Замена символов в OCR тексте."""
-
         return text.translate(self.translate_table)
 
 
@@ -195,3 +196,29 @@ class TextProcessor(BaseTextProcessor):
         for pattern, repl in pipeline.items():
             text = re.sub(pattern, repl, text)
         return text
+
+
+@dataclass
+class WordPredictionProcessor:
+    """Класс для добавления предсказанных слов к тексту."""
+
+    nlp_model: Language
+    prediction_model: Word2VecModel
+    vocabulary: list
+    processor: KeywordsProcessor
+
+    def add_similar_words(self, text: str) -> str:
+        """Дополняет поисковый запрос."""
+        text = self.processor.filter_letters(text)
+        words = lemmatization(self.nlp_model(text))
+        words = self.processor.translate(words)
+        for word in copy(words):
+            if word in self.vocabulary:
+                try:
+                    similar_words = self.prediction_model.most_similar(
+                        word, qty=BaseConfig.AUTOCOMPLETE_SIZE
+                    )
+                    words.extend([w for w, _ in similar_words])
+                except KeyError:
+                    pass
+        return " ".join(words)
