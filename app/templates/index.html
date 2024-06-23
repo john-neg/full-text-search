@@ -30,34 +30,43 @@
   <main class="page">
     <section class="clean-block features">
       <div class="container">
-        <form>
+        <form method="post">
+          {{ form.hidden_tag() }}
+          {{ switch_autocomplete }}
           <div class="block-heading">
             <h2 class="text-info">Система поиска научной информации</h2>
             <div class="form-check form-switch form-check-inline mb-2">
-              <input class="form-check-input" type="checkbox" id="formCheck-1">
-              <label class="form-check-label" for="formCheck-1">Добавить рекомендуемые слова</label>
+              {{ form.switch_autocomplete(class="form-check-input", type="checkbox", checked=switch_autocomplete, id="flexSwitchAutocomplete") }}
+              {{ form.switch_autocomplete.label(class="form-check-label", for="flexSwitchAutocomplete") }}
             </div>
             <div class="form-check form-switch form-check-inline mb-2">
-              <input class="form-check-input" type="checkbox" id="formCheck-2">
-              <label class="form-check-label" for="formCheck-2">Выводить больше результатов</label>
+              {{ form.switch_more_results(class="form-check-input", type="checkbox", checked=switch_more_results, id="flexSwitchMoreResults") }}
+              {{ form.switch_more_results.label(class="form-check-label", for="flexSwitchMoreResults") }}
             </div>
             <div class="row justify-content-center">
               <div class="col-lg-8">
-                <form>
-                  <input class="form-control mt-2 mb-3" type="text" placeholder="Введите запрос">
-                </form>
+                {{ form.search_string(class="form-control mt-2 mb-3", type="text", placeholder="Введите запрос") }}
               </div>
             </div>
+            {% if addon_words %}
+              <div class="row justify-content-center">
+                <div class="col-lg-8">
+                  {{ addon_words }}
+                </div>
+              </div>
+            {% endif %}
             <div class="row justify-content-center">
               <div class="col-lg-8">
                 <div class="btn-group" role="group">
-                  <button class="btn btn-primary" type="button">Поиск</button>
+                  {{ form.search_similar(class="btn btn-primary") }}
                   <button class="btn btn-success" type="button">Уточнить</button>
-                  <button class="btn btn-secondary" type="button">Новый запрос</button>
+                  <a class="btn btn-secondary" role="button" href="{{ url_for('.index') }}">Новый запрос</a>
                 </div>
               </div>
             </div>
           </div>
+        </form>
+        {% if articles %}
           <div class="row justify-content-center">
             <div class="col-lg-8">
               <div class="table-responsive">
@@ -69,25 +78,18 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Фахретдинова Дилара Ильдаровна, Сабитова Юлия Камилевна Решение начально-граничных задач
-                        для волнового уравнения методом интегральных преобразований Фурье // Инновации в науке.
-                        2015. №5 (42). URL: https://cyberleninka.ru/article/n/reshenie-nachalno-granichnyh-
-                        zadach-dlya-volnovogo-uravneniya-metodom-integralnyh-preobrazovaniy-furie (дата обращения:).</td>
-                      <td>29,45%</td>
-                    </tr>
-                    <tr>
-                      <td>Забуская А.С. СУММЫ ФЭЙЕРА КАК ЛИНЕЙНЫЙ МЕТОД СУММИРОВАНИЯ РЯДОВ ФУРЬЕ // Вестник
-                        магистратуры. 2015. №2-1 (41). URL: https://cyberleninka.ru/article/n/summy-feyera-kak-
-                        lineynyy-metod-summirovaniya-ryadov-furie (дата обращения:).</td>
-                      <td>22,91%</td>
-                    </tr>
+                    {% for article, url, date, perc in articles.values() %}
+                      <tr>
+                        <td>{{ article.reference }} URL: <a href="{{ url }}">{{ url }}</a> (дата обращения: {{ date }}).</td>
+                        <td>{{ '{0:.2f}'.format(perc) }}</td>
+                      </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-        </form>
+        {% endif %}
       </div>
     </section>
   </main>

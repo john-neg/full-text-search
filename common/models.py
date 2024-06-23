@@ -7,7 +7,7 @@ from config import DocumentStatusType
 
 @dataclass
 class ArticleDocument:
-    _id: ObjectId = ObjectId()
+    _id: ObjectId
     article_slug: str = ""
     authors: list[str] = field(default_factory=list)
     title: str = ""

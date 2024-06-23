@@ -3,14 +3,15 @@ import random
 import time
 from datetime import datetime
 
+from bson import ObjectId
 from selenium.common import NoSuchElementException, TimeoutException
 
+from common.processors import LanguageProcessor
 from config import BaseConfig, CrawlerConfig, DocumentStatusType, MongoDBSettings
 from func import check_captcha, check_empty, check_nginx_error, get_browser
 from pages.article_page import ArticlePage
 from pages.category_page import CategoryPage
 from common.db_service import MongoDbCrudService, get_mongo_db_document_service
-from common.func import get_language, get_language_detector
 from common.models import ArticleDocument
 
 
@@ -50,7 +51,7 @@ def parse_links(collection: str, database: MongoDbCrudService):
         // CrawlerConfig.ARTICLES_PER_PAGE
     )
     # Запускаем постраничный цикл
-    for page in range(start_page + 1 - CrawlerConfig.PAGE_OFFSET, pages + 1):
+    for page in range(start_page + 1 + CrawlerConfig.PAGE_OFFSET, pages + 1):
         category_page.get_articles_page(page)
         while check_nginx_error(category_page.browser):
             time.sleep(5)
@@ -78,7 +79,7 @@ def parse_links(collection: str, database: MongoDbCrudService):
                 record = database.get({"article_slug": article_slug})
                 # Если нет записи добавляем в базу данных
                 if not record:
-                    article_data = ArticleDocument(article_slug=article_slug)
+                    article_data = ArticleDocument(_id=ObjectId(), article_slug=article_slug)
                     database.create(article_data.to_dict())
                 time.sleep(0.1)
         time.sleep(random.choice([1, 1.5, 2]))
@@ -91,7 +92,7 @@ def parse_articles(collection: str, database: MongoDbCrudService):
     # Открываем браузер
     browser = get_browser()
     # Получаем экземпляр класса определения языка текста
-    lang_detector = get_language_detector()
+    lang_processor = LanguageProcessor()
 
     # Пока на странице отсутствует капча выполняем парсинг данных
     while not check_captcha(browser):
@@ -140,8 +141,8 @@ def parse_articles(collection: str, database: MongoDbCrudService):
                         article_slug, article_page, ArticleDocument(**db_record)
                     )
                     # Добавляем данные о языке
-                    article_data.language = get_language(
-                        article_data.text, lang_detector
+                    article_data.language = lang_processor.get_language(
+                        article_data.text
                     )
                     article_data.parse_status = DocumentStatusType.COMPLETED
                     # Обновляем запись в базе данных

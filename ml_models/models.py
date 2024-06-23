@@ -55,7 +55,7 @@ class TfIdfModel:
         )
         self.matrix_objects = data.objects_ids
 
-    def search_similar(self, search_lemma: str, n: int = 10) -> dict[ObjectId, float]:
+    def search_similar(self, search_lemma: str, n: int) -> dict[ObjectId, float]:
         """Находит ближайшие документы."""
         if self.matrix is None:
             raise ValueError("В модели отсутствует Tf-Idf матрица")
@@ -114,7 +114,7 @@ class Word2VecModel:
 
     def load(self, filename: str) -> None:
         """Загружает модель из файла."""
-        self.model = self.model.load(filename)
+        self.model = Word2Vec.load(filename)
 
     def save(self, filename: str) -> None:
         """Сохраняет модель в файл."""

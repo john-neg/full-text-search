@@ -19,9 +19,11 @@ class BaseConfig(object):
     # Название файла модели TF-IDF
     WORD2VEC_MODEL_FILE = os.path.join(DATA_DIR, "word2vec.model")
     # Размер автодополнения поисковых запросов
-    AUTOCOMPLETE_SIZE = 1
+    AUTOCOMPLETE_SIZE = 2
     # Размер словаря модели
     VOCABULARY_SIZE = 10000
+    # Кол-во результатов поиска
+    SEARCH_RESULTS = 5
 
 
 class FlaskConfig(object):
@@ -49,7 +51,7 @@ class CrawlerConfig(object):
     # Количество статей на странице
     ARTICLES_PER_PAGE = 20
     # Смещение для номера начальной страницы
-    PAGE_OFFSET = 0
+    PAGE_OFFSET = 38
 
 
 class MongoDBSettings(object):

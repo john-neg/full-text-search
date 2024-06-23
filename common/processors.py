@@ -18,11 +18,23 @@ from ml_models.models import Word2VecModel
 
 @dataclass
 class LanguageProcessor:
-    """Процессор для определения языка и перевода текста."""
+    """Процессор для определения языка и перевода текста.
 
-    target_language: str
+    Attributes:
+        target_language (str): язык ("russian", "english" и т.д.)
+        language_detector (LanguageDetector): объект определителя языка
+        translations (dict[str, str]): словарь переводов
+    """
+
+    target_language: str = "russian"
     language_detector: LanguageDetector = get_language_detector()
     translations: dict[str, str] = field(default_factory=dict)
+
+    def __post_init__(self):
+        try:
+            self.load_translations(BaseConfig.TRANSLATIONS_CACHE_FILE)
+        except FileNotFoundError:
+            pass
 
     def get_language(self, text: str) -> str:
         """Возвращает язык текста."""
@@ -199,7 +211,7 @@ class TextProcessor(BaseTextProcessor):
 
 
 @dataclass
-class WordPredictionProcessor:
+class SearchPrepareProcessor:
     """Класс для добавления предсказанных слов к тексту."""
 
     nlp_model: Language
@@ -207,18 +219,29 @@ class WordPredictionProcessor:
     vocabulary: list
     processor: KeywordsProcessor
 
-    def add_similar_words(self, text: str) -> str:
-        """Дополняет поисковый запрос."""
+    def process_text(self, text: str) -> str:
+        """Формирует поисковый запрос."""
         text = self.processor.filter_letters(text)
         words = lemmatization(self.nlp_model(text))
         words = self.processor.translate(words)
+        return " ".join(words)
+
+    def add_similar_words(self, text: str) -> str:
+        """Дополняет поисковый запрос."""
+        words = self.process_text(text).split()
+        addon = []
         for word in copy(words):
             if word in self.vocabulary:
                 try:
                     similar_words = self.prediction_model.most_similar(
                         word, qty=BaseConfig.AUTOCOMPLETE_SIZE
                     )
-                    words.extend([w for w, _ in similar_words])
+                    addon.extend(
+                        [
+                            w for w, percent in similar_words
+                            if w not in words and percent > 0.4
+                        ]
+                    )
                 except KeyError:
                     pass
-        return " ".join(words)
+        return " ".join(addon)

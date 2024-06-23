@@ -16,14 +16,6 @@ def get_language_detector() -> LanguageDetector:
     )
 
 
-def get_language(text, detector) -> str:
-    """Возвращает язык текста."""
-    try:
-        return detector.detect_language_of(text).name.lower()
-    except AttributeError:
-        return ""
-
-
 def get_nlp_model(name: str = "ru_core_news_lg") -> Language:
     """Возвращает Pipeline NLP модели SpaCy."""
 
