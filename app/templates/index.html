@@ -13,14 +13,12 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg fixed-top bg-body clean-navbar">
-    <div class="container">
+  <nav class="navbar navbar-expand fixed-top bg-body clean-navbar">
+    <div class="container-fluid">
       <a class="navbar-brand logo" href="#">
-        <i class="far fa-lightbulb text-info"></i>
+        <i class="far fa-lightbulb text-info mx-2"></i>
       </a>
-      <div class="container">
-      </div>
-      <div class="collapse navbar-collapse" id="navcol-1">
+      <div id="navcol-1" class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <h5 class="text-uppercase text-info">Количество статей - <strong>{{ total_articles }}</strong></h5>
@@ -35,7 +33,7 @@
         <form method="post">
           {{ form.hidden_tag() }}
           <div class="block-heading">
-            <h2 class="text-info">Система полнотекстового поиска научной информации</h2>
+            <h2 class="text-info">Полнотекстовый поиск научной информации</h2>
             <div class="form-check form-switch form-check-inline mb-2">
               {{ form.switch_autocomplete(class="form-check-input", type="checkbox", checked=switch_autocomplete, id="flexSwitchAutocomplete") }}
               {{ form.switch_autocomplete.label(class="form-check-label", for="flexSwitchAutocomplete") }}

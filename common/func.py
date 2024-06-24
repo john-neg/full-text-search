@@ -27,12 +27,14 @@ def lemmatization(sentence: Doc):
 
     # Лемматизация
     sentence = [
-        word.lemma_.lower().strip() if word.lemma_ != "-PRON-"
-        else word.lower_ for word in sentence
+        word.lemma_.lower().strip() if word.lemma_ != "-PRON-" else word.lower_
+        for word in sentence
     ]
     # Фильтры
     sentence = [
-        word for word in sentence if all(
+        word
+        for word in sentence
+        if all(
             [
                 # Нет в стоп словах
                 word not in stop_words.STOP_WORDS,

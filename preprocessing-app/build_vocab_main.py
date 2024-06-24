@@ -1,5 +1,3 @@
-import os
-
 from common.db_service import get_mongo_db_document_service
 from common.func import get_nlp_model, lemmatization
 from config import BaseConfig
@@ -24,7 +22,8 @@ lemmas_counter = get_lemmas_count(get_db_list(db), show_progress=True)
 
 # Создаем словарь наиболее часто встречаемых слов в текстах
 articles_vocabulary = [
-    word for word, _ in lemmas_counter.most_common(BaseConfig.VOCABULARY_SIZE)
+    word
+    for word, _ in lemmas_counter.most_common(BaseConfig.VOCABULARY_SIZE)
     if word not in vocabulary
 ]
 
@@ -34,4 +33,4 @@ final_vocabulary.extend(articles_vocabulary)
 
 # Сохраняем в файл
 with open(BaseConfig.EXT_VOCAB_FILE, mode="w", encoding="utf-8") as file:
-    file.write("\n".join(sorted(final_vocabulary[:BaseConfig.VOCABULARY_SIZE])))
+    file.write("\n".join(sorted(final_vocabulary[: BaseConfig.VOCABULARY_SIZE])))

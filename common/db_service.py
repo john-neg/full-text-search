@@ -27,7 +27,11 @@ def task_retry_processor(retry_count: int = 5):
                     return func(*args, **kwargs)
                 except ConnectionFailure:
                     print("ConnectionFailure: retry", retry + 1)
-                    with open(os.path.join(BaseConfig.LOGS_DIR, "mongo_db.log"), "a", encoding="UTF8") as err:
+                    with open(
+                        os.path.join(BaseConfig.LOGS_DIR, "mongo_db.log"),
+                        "a",
+                        encoding="UTF8",
+                    ) as err:
                         err.write(
                             f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} {err}\n"
                         )
@@ -90,6 +94,4 @@ def get_mongo_db_document_service(
     mongo_db: Database = get_mongo_db(),
     collection_name: str = MongoDBSettings.COLLECTION_NAME,
 ) -> MongoDbCrudService:
-    return MongoDbCrudService(
-        repository=MongoDbRepository(mongo_db, collection_name)
-    )
+    return MongoDbCrudService(repository=MongoDbRepository(mongo_db, collection_name))

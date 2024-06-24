@@ -238,7 +238,8 @@ class SearchPrepareProcessor:
                     )
                     addon.extend(
                         [
-                            w for w, percent in similar_words
+                            w
+                            for w, percent in similar_words
                             if w not in words and percent > 0.4
                         ]
                     )

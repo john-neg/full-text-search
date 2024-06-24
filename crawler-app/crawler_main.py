@@ -6,13 +6,13 @@ from datetime import datetime
 from bson import ObjectId
 from selenium.common import NoSuchElementException, TimeoutException
 
+from common.db_service import MongoDbCrudService, get_mongo_db_document_service
+from common.models import ArticleDocument
 from common.processors import LanguageProcessor
 from config import BaseConfig, CrawlerConfig, DocumentStatusType, MongoDBSettings
 from func import check_captcha, check_empty, check_nginx_error, get_browser
 from pages.article_page import ArticlePage
 from pages.category_page import CategoryPage
-from common.db_service import MongoDbCrudService, get_mongo_db_document_service
-from common.models import ArticleDocument
 
 
 def parse_data(
@@ -79,7 +79,9 @@ def parse_links(collection: str, database: MongoDbCrudService):
                 record = database.get({"article_slug": article_slug})
                 # Если нет записи добавляем в базу данных
                 if not record:
-                    article_data = ArticleDocument(_id=ObjectId(), article_slug=article_slug)
+                    article_data = ArticleDocument(
+                        _id=ObjectId(), article_slug=article_slug
+                    )
                     database.create(article_data.to_dict())
                 time.sleep(0.1)
         time.sleep(random.choice([1, 1.5, 2]))
@@ -98,7 +100,10 @@ def parse_articles(collection: str, database: MongoDbCrudService):
     while not check_captcha(browser):
         # Ищем статью со статусом waiting
         cursor = database.list({"parse_status": DocumentStatusType.WAITING})
-        db_record = cursor.next()
+        try:
+            db_record = cursor.next()
+        except StopIteration:
+            break
         article_slug = db_record.get("article_slug")
         database.update(
             db_record, {"$set": {"parse_status": DocumentStatusType.IN_PROGRESS}}
