@@ -69,6 +69,7 @@ def index():
             article = ArticleDocument(**db.get_by_id(_id))
             data, url = article.reference.split(" URL: ")
             url = url.replace(" (дата обращения:).", "")
+            percent = f"{percent * 100:.2f}%"
             article.reference = data
             articles[_id] = [article, url, date, percent]
 

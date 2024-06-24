@@ -82,7 +82,7 @@
                     {% for article, url, date, perc in articles.values() %}
                       <tr>
                         <td>{{ article.reference }} URL: <a href="{{ url }}">{{ url }}</a> (дата обращения: {{ date }}).</td>
-                        <td>{{ '{0:.2f}'.format(perc) }}</td>
+                        <td>{{ perc }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
