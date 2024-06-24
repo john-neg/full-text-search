@@ -2,8 +2,6 @@ import os
 import subprocess
 import sys
 
-from config import BaseConfig
-
 # Обновление pip
 subprocess.check_call(
     [sys.executable, "-m", "pip", "install", "--upgrade", "pip"],
@@ -13,6 +11,9 @@ subprocess.check_call(
 subprocess.check_call(
     [sys.executable, "-m", "pip", "install", "-r", "requirements.txt"],
 )
+
+
+from config import BaseConfig
 
 # Создание директорий
 for local_directory in (
