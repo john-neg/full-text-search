@@ -18,10 +18,14 @@ class BaseConfig(object):
     TF_IDF_MODEL_FILE = os.path.join(DATA_DIR, "tfidf_model.zip")
     # Название файла модели TF-IDF
     WORD2VEC_MODEL_FILE = os.path.join(DATA_DIR, "word2vec.model")
-    # Размер автодополнения поисковых запросов
-    AUTOCOMPLETE_SIZE = 2
+    # Файл внешнего словаря
+    EXT_VOCAB_FILE = os.path.join(DATA_DIR, "external_vocab.txt")
+    # Файл внешнего словаря
+    LEM_VOCAB_FILE = os.path.join(DATA_DIR, "external_vocab_lemmas.txt")
     # Размер словаря модели
     VOCABULARY_SIZE = 10000
+    # Размер автодополнения поисковых запросов
+    AUTOCOMPLETE_SIZE = 1
     # Кол-во результатов поиска
     SEARCH_RESULTS = 5
 

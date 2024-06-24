@@ -32,7 +32,6 @@
       <div class="container">
         <form method="post">
           {{ form.hidden_tag() }}
-          {{ switch_autocomplete }}
           <div class="block-heading">
             <h2 class="text-info">Система поиска научной информации</h2>
             <div class="form-check form-switch form-check-inline mb-2">
@@ -48,22 +47,24 @@
                 {{ form.search_string(class="form-control mt-2 mb-3", type="text", placeholder="Введите запрос") }}
               </div>
             </div>
-            {% if addon_words %}
-              <div class="row justify-content-center">
-                <div class="col-lg-8">
-                  {{ addon_words }}
-                </div>
-              </div>
-            {% endif %}
             <div class="row justify-content-center">
               <div class="col-lg-8">
                 <div class="btn-group" role="group">
                   {{ form.search_similar(class="btn btn-primary") }}
-                  <button class="btn btn-success" type="button">Уточнить</button>
-                  <a class="btn btn-secondary" role="button" href="{{ url_for('.index') }}">Новый запрос</a>
+                  {% if articles %}
+                    <a class="btn btn-secondary" role="button" href="{{ url_for('.index') }}">Очистить</a>
+                  {% endif  %}
                 </div>
               </div>
             </div>
+            {% if addon_words %}
+              <div class="row justify-content-center">
+                <div class="col-lg-8 mt-4">
+                  <b>Автодополнение:</b><br>
+                  {{ addon_words }}
+                </div>
+              </div>
+            {% endif %}
           </div>
         </form>
         {% if articles %}

@@ -48,7 +48,7 @@ class TfIdfModel:
         self, data: ArticlesLemmasIterator, show_progress: bool = False
     ) -> None:
         """Обучает модель, создает TfIdf матрицу."""
-        if self.matrix is None:
+        if self.vectorizer is None:
             raise ValueError("В модели отсутствует TfidfVectorizer")
         self.matrix = self.vectorizer.fit_transform(
             tqdm(data) if show_progress else data

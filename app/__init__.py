@@ -1,9 +1,7 @@
-import os
-
 from flask import Flask
 
-from config import BaseConfig, FlaskConfig
 from app.main import bp as main_bp
+from config import FlaskConfig
 
 
 def register_blueprints(app):
