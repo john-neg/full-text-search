@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from zipfile import ZIP_DEFLATED, ZipFile
 
 from bson import ObjectId, json_util
-from gensim.models import Word2Vec
+from gensim.models import KeyedVectors, Word2Vec
 from pymongo.cursor import Cursor
 from scipy import sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -123,8 +123,25 @@ class Word2VecModel:
         else:
             raise ValueError("Отсутствует объект модели Word2Vec.")
 
-    def most_similar(self, word: str, qty: int = 5) -> list[tuple[str, float]]:
+    def most_similar(self, word: str, topn: int = 5) -> list[tuple[str, float]]:
         """Метод нахождения ближайших слов."""
         if self.model is not None:
-            return self.model.wv.most_similar(word, topn=qty)
+            return self.model.wv.most_similar(word, topn=topn)
         raise ValueError("Отсутствует объект модели Word2Vec.")
+
+
+# @dataclass
+# class KeyedVectorsModel:
+#     """Класс для работы с Word2Vec моделью."""
+#
+#     model: KeyedVectors
+#
+#     def load(self, filename: str) -> None:
+#         """Загружает модель из файла."""
+#         self.model = KeyedVectors.load(filename)
+#
+#     def most_similar(self, word: str, qty: int = 5) -> list[tuple[str, float]]:
+#         """Метод нахождения ближайших слов."""
+#         if self.model is not None:
+#             return self.model.most_similar(word, topn=qty)
+#         raise ValueError("Отсутствует объект модели Word2Vec.")

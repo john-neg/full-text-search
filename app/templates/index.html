@@ -35,8 +35,15 @@
           <div class="block-heading">
             <h2 class="text-info">Полнотекстовый поиск научной информации</h2>
             <div class="form-check form-switch form-check-inline mb-2">
+              Автодополнение:
+            </div>
+            <div class="form-check form-switch form-check-inline mb-2">
               {{ form.switch_autocomplete(class="form-check-input", type="checkbox", checked=switch_autocomplete, id="flexSwitchAutocomplete") }}
               {{ form.switch_autocomplete.label(class="form-check-label", for="flexSwitchAutocomplete") }}
+            </div>
+            <div class="form-check form-switch form-check-inline mb-2">
+              {{ form.switch_autocomplete_wiki(class="form-check-input", type="checkbox", checked=switch_autocomplete_wiki, id="flexSwitchAutocompleteWiki") }}
+              {{ form.switch_autocomplete_wiki.label(class="form-check-label", for="flexSwitchAutocompleteWiki") }}
             </div>
             <div class="form-check form-switch form-check-inline mb-2">
               {{ form.switch_more_results(class="form-check-input", type="checkbox", checked=switch_more_results, id="flexSwitchMoreResults") }}

@@ -1,6 +1,9 @@
 import datetime
+import os
+from zipfile import ZipFile
 
 from flask import render_template, request
+from gensim.models import KeyedVectors
 
 from common.db_service import get_mongo_db_document_service
 from common.func import get_nlp_model
@@ -21,12 +24,15 @@ tfidf_model.load(BaseConfig.TF_IDF_MODEL_FILE)
 w2v_model = Word2VecModel()
 w2v_model.load(BaseConfig.WORD2VEC_MODEL_FILE)
 
+wiki_model = KeyedVectors.load_word2vec_format(BaseConfig.WIKI_MODEL_FILE)
+
 language_processor = LanguageProcessor(target_language="russian")
 language_processor.load_translations(BaseConfig.TRANSLATIONS_CACHE_FILE)
 
 words_processor = SearchPrepareProcessor(
     nlp_model=get_nlp_model(),
     prediction_model=w2v_model,
+    wiki_model=wiki_model,
     vocabulary=tfidf_model.vectorizer.vocabulary,
     processor=KeywordsProcessor(language_processor),
 )
@@ -43,6 +49,7 @@ def index():
     # Положение переключателей
     switch_autocomplete = request.form.get("switch_autocomplete") is not None
     switch_more_results = request.form.get("switch_more_results") is not None
+    switch_autocomplete_wiki = request.form.get("switch_autocomplete_wiki") is not None
 
     # Общее количество обработанных статей
     total_articles = db.repository.collection.count_documents(
@@ -58,10 +65,13 @@ def index():
         search_results_number = BaseConfig.SEARCH_RESULTS
         search_request = words_processor.process_text(search_string)
         if request.form.get("switch_autocomplete"):
-            addon_words = words_processor.add_similar_words(search_string)
-            search_request = f"{search_request} {addon_words}"
+            addon_words = ' '.join([addon_words, words_processor.add_similar_words(search_string)])
+        if request.form.get("switch_autocomplete_wiki"):
+            addon_words = ' '.join([addon_words, words_processor.add_similar_words(search_string, model="wiki")])
         if request.form.get("switch_more_results"):
             search_results_number += 10
+        if addon_words:
+            search_request = f"{search_request} {addon_words}"
         similar_articles = tfidf_model.search_similar(
             search_request, search_results_number
         )
@@ -82,6 +92,7 @@ def index():
         addon_words=addon_words,
         switch_autocomplete=switch_autocomplete,
         switch_more_results=switch_more_results,
+        switch_autocomplete_wiki=switch_autocomplete_wiki,
     )
 
 

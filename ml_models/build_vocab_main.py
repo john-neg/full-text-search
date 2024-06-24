@@ -32,5 +32,5 @@ final_vocabulary = list(vocabulary)
 final_vocabulary.extend(articles_vocabulary)
 
 # Сохраняем в файл
-with open(BaseConfig.EXT_VOCAB_FILE, mode="w", encoding="utf-8") as file:
+with open(BaseConfig.LEM_VOCAB_FILE, mode="w", encoding="utf-8") as file:
     file.write("\n".join(sorted(final_vocabulary[: BaseConfig.VOCABULARY_SIZE])))

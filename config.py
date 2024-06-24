@@ -16,12 +16,16 @@ class BaseConfig(object):
     TRANSLATIONS_CACHE_FILE = os.path.join(DATA_DIR, "keyword_translations.json")
     # Название файла модели TF-IDF
     TF_IDF_MODEL_FILE = os.path.join(DATA_DIR, "tfidf_model.zip")
-    # Название файла модели TF-IDF
+    # Название файла модели WORD2VEC
     WORD2VEC_MODEL_FILE = os.path.join(DATA_DIR, "word2vec.model")
+    # Название файла модели WORD2VEC Wikipedia
+    WIKI_MODEL_FILE = os.path.join(DATA_DIR, "word2vec_wiki.model")
     # Файл внешнего словаря
     EXT_VOCAB_FILE = os.path.join(DATA_DIR, "external_vocab.txt")
     # Файл внешнего словаря
     LEM_VOCAB_FILE = os.path.join(DATA_DIR, "external_vocab_lemmas.txt")
+    # Файл с дополнительными стоп-словами
+    STOP_WORDS_FILE = os.path.join(DATA_DIR, "stopwords-ru.txt")
     # Размер словаря модели
     VOCABULARY_SIZE = 10000
     # Размер автодополнения поисковых запросов

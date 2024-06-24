@@ -7,6 +7,7 @@ class SearchForm(FlaskForm):
     search_string = StringField(
         "Данные поля программы", validators=[DataRequired("Необходимо ввести запрос")]
     )
-    switch_autocomplete = SubmitField("Автодополнение запроса")
+    switch_autocomplete = SubmitField("Тексты")
+    switch_autocomplete_wiki = SubmitField("Wikipedia")
     switch_more_results = SubmitField("Вывести больше результатов")
     search_similar = SubmitField("Поиск")

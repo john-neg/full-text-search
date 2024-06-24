@@ -3,8 +3,14 @@ import string
 import spacy
 from lingua import LanguageDetector, LanguageDetectorBuilder
 from spacy import Language
-from spacy.lang.ru import stop_words
 from spacy.tokens import Doc
+from spacy.lang.ru import stop_words
+
+from config import BaseConfig
+
+with open(BaseConfig.STOP_WORDS_FILE) as file:
+    stopwords = set([word.strip() for word in file.readlines()])
+    stopwords.update(stop_words.STOP_WORDS)
 
 
 def get_language_detector() -> LanguageDetector:
@@ -37,7 +43,7 @@ def lemmatization(sentence: Doc):
         if all(
             [
                 # Нет в стоп словах
-                word not in stop_words.STOP_WORDS,
+                word not in stopwords,
                 # Не пунктуация
                 word not in string.punctuation,
                 # Только буквы

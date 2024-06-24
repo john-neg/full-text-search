@@ -6,6 +6,7 @@ from copy import copy
 from dataclasses import dataclass, field
 
 import translators as ts
+from gensim.models import KeyedVectors
 from lingua import LanguageDetector
 from requests import HTTPError
 from spacy import Language
@@ -216,6 +217,7 @@ class SearchPrepareProcessor:
 
     nlp_model: Language
     prediction_model: Word2VecModel
+    wiki_model: KeyedVectors
     vocabulary: list
     processor: KeywordsProcessor
 
@@ -226,16 +228,23 @@ class SearchPrepareProcessor:
         words = self.processor.translate(words)
         return " ".join(words)
 
-    def add_similar_words(self, text: str) -> str:
+    def add_similar_words(self, text: str, model: str = "w2v") -> str:
         """Дополняет поисковый запрос."""
         words = self.process_text(text).split()
         addon = []
         for word in copy(words):
             if word in self.vocabulary:
                 try:
-                    similar_words = self.prediction_model.most_similar(
-                        word, qty=BaseConfig.AUTOCOMPLETE_SIZE
-                    )
+                    if model == "wiki":
+                        similar_words = self.wiki_model.most_similar(
+                            word, topn=BaseConfig.AUTOCOMPLETE_SIZE
+                        )
+                    elif model == "w2v":
+                        similar_words = self.prediction_model.most_similar(
+                            word, topn=BaseConfig.AUTOCOMPLETE_SIZE
+                        )
+                    else:
+                        similar_words = None
                     addon.extend(
                         [
                             w
